@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.dao.IRouteDao">
+    <select id="getAllRoute" resultType="route">
+        select * from route
+    </select>
+    <select id="getRouteById" resultType="route">
+        select * from route where id = #{id};
+    </select>
+    <select id="getLastId" resultType="int">
+        SELECT id FROM route ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="getCount" resultType="int">
+        select count(1) from route
+    </select>
+    <insert id="saveRoute">
+        insert into route(id, gatewayApiName, insideApiUrl, serviceId, description, state, idempotents, needfee) values(#{id}, #{gatewayApiName}, #{insideApiUrl}, #{serviceId}, #{description}, #{state}, #{idempotents}, #{needfee});
+    </insert>
+    <update id="updateRoute">
+        update route set gatewayApiName = #{gatewayApiName}, insideApiUrl = #{insideApiUrl}, serviceId = #{serviceId}, description = #{description}, state = #{state}, idempotents = #{idempotents}, needfee = #{needfee} where id = #{id};
+    </update>
+    <!--<delete id="removeClient">-->
+        <!--delete from client where id in ${sid};-->
+    <!--</delete>-->
+    <delete id="removeRoute">
+        delete from route where id = #{id};
+    </delete>
+</mapper>

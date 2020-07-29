@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.dao.IAdhibitionDao">
+    <select id="getAllAdhibition" resultType="adhibition">
+        select * from adhibition
+    </select>
+    <select id="getAdhibitionById" resultType="adhibition">
+        select * from adhibition where id = #{id};
+    </select>
+    <select id="getAdhibitionByCusId" resultType="adhibition">
+        select * from adhibition where cusId = #{cusId};
+    </select>
+    <select id="getLastId" resultType="int">
+        SELECT id FROM adhibition ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="getCount" resultType="int">
+        select count(1) from adhibition
+    </select>
+    <insert id="saveAdhibition">
+        insert into adhibition(id, corpName, appName, appKey, AppSecret, redirectUrl, linit, description, cusId, state) values(#{id}, #{corpName}, #{appName}, ${appKey}, ${AppSecret}, #{redirectUrl}, #{linit}, #{description}, #{cusId},  #{state});
+    </insert>
+    <update id="updateAdhibition">
+        update adhibition set corpName = #{corpName}, appName = #{appName}, redirectUrl = #{redirectUrl}, linit = #{linit}, description = #{description}, cusId = #{cusId}, state = #{state} where id = #{id};
+    </update>
+    <!--<delete id="removeClient">-->
+        <!--delete from client where id in ${sid};-->
+    <!--</delete>-->
+    <delete id="removeAdhibition">
+        delete from adhibition where id = #{id};
+    </delete>
+    <delete id="removeAdhibitionByCusId">
+        delete from adhibition where cusId = #{cusId};
+    </delete>
+</mapper>

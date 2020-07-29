@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <!--注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的-->
+    <style>
+        .route-input {
+            width: 80%;
+        }
+
+        #save-route {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<form id="save-route" class="layui-form" lay-filter="example">
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">ID</label>
+        <div class="layui-input-block">
+            <input name="id" class="layui-input route-input" type="text"
+                   autocomplete="off" readonly>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">名称</label>
+        <div class="layui-input-block">
+            <input name="gatewayApiName" class="layui-input route-input" type="text" autocomplete="off"
+                   readonly>
+        </div>
+    </div>
+
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">URL</label>
+        <div class="layui-input-block">
+            <input name="insideApiUrl" class="layui-input route-input" type="text"
+                   autocomplete="off" readonly>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">serviceId</label>
+        <div class="layui-input-block">
+            <input name="serviceId" class="layui-input route-input" type="text" autocomplete="off"
+                   readonly>
+        </div>
+    </div>
+
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label label-route">描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" class="layui-textarea route-input" readonly></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">状态</label>
+        <div class="layui-input-block">
+            <input name="state" title="有效" type="radio" checked="" value="1" disabled>
+            <input name="state" title="无效" type="radio" value="0" disabled>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">幂等性</label>
+        <div class="layui-input-block">
+            <input name="idempotents" title="幂等" type="radio" checked="" value="1" disabled>
+            <input name="idempotents" title="非幂等" type="radio" value="0" disabled>
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-route">是否收费</label>
+        <div class="layui-input-block">
+            <input name="needfee" title="收费" type="radio" checked="" value="1" disabled>
+            <input name="needfee" title="免费" type="radio" value="0" disabled>
+        </div>
+    </div>
+
+</form>
+
+<script src="../layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'jquery', 'layer'], function () {
+        var form = layui.form
+            , $ = layui.jquery
+
+        var url = window.location.href
+        console.log(url);
+        var id = url.substring(34);
+
+        //表单赋值
+        $.get("../GetRouteById/" + id, function (obj) {
+            form.val('example', obj);
+        })
+
+    });
+</script>
+
+</body>
+</html>

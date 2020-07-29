@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <!--注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的-->
+    <style>
+        .adhibition-input {
+            width: 80%;
+        }
+
+        .label-adhibition {
+            width: 130px;
+        }
+
+        #save-adhibition {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<form id="save-adhibition" class="layui-form" lay-filter="example">
+    <div class="layui-form-item">
+        <label class="layui-form-label label-adhibition">ID</label>
+        <div class="layui-input-block">
+            <input name="id" class="layui-input adhibition-input" type="text"
+                   autocomplete="off" readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-adhibition">公司</label>
+        <div class="layui-input-block">
+            <input name="corpName" class="layui-input adhibition-input" type="text" autocomplete="off"
+                   readonly>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-adhibition">应用名称</label>
+        <div class="layui-input-block">
+            <input name="appName" class="layui-input adhibition-input" type="text" placeholder="请输入应用名称"
+                   autocomplete="off" lay-verify="required" lay-reqText="应用名称不能为空。">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-adhibition">回调地址</label>
+        <div class="layui-input-block">
+            <input name="redirectUrl" class="layui-input adhibition-input" type="text" placeholder="请输入回调地址" autocomplete="off"
+                   lay-verify="required" lay-reqText="回调地址不能为空。">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-adhibition">日调用量限制</label>
+        <div class="layui-input-block">
+            <input name="linit" class="layui-input adhibition-input" type="number" placeholder="请输入日调用量限制" autocomplete="off"
+                   lay-verify="required|lin" lay-reqText="日调用量限制不能为空。">
+        </div>
+    </div>
+    <div class="layui-form-item layui-form-text">
+        <label class="layui-form-label label-adhibition">描述</label>
+        <div class="layui-input-block">
+            <textarea name="description" class="layui-textarea adhibition-input" placeholder="请输入内容"></textarea>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-adhibition">状态</label>
+        <div class="layui-input-block">
+            <input name="state" title="有效" type="radio" checked="" value="1">
+            <input name="state" title="失效" type="radio" value="0">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button id="save-btn" class="layui-btn" type="submit" lay-filter="demo1" lay-submit="">立即提交</button>
+            <button class="layui-btn layui-btn-primary" type="reset">重置</button>
+        </div>
+    </div>
+</form>
+
+<script src="../layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'jquery', 'layer'], function () {
+        var form = layui.form
+            , $ = layui.jquery
+            , layer = layui.layer
+
+        var url = window.location.href
+        var id = url.substring(39);
+
+        //表单赋值
+        $.get("../GetAdhibitionById/" + id, function (obj) {
+            form.val('example', obj);
+        })
+
+
+        //自定义验证规则
+        form.verify({
+            lin: function (value) {
+                if (value < 0)
+                    return '日调用量限制只能为正数。';
+            }
+        });
+
+        //监听提交
+        form.on('submit(demo1)', function (data) {
+            console.log(data.field);
+
+            $.post("../UpdateAdhibition", {
+                id:data.field.id,
+                corpName:data.field.corpName,
+                appName:data.field.appName,
+                redirectUrl:data.field.redirectUrl,
+                linit:data.field.linit,
+                description:data.field.description,
+                state:data.field.state
+            }, function (res) {
+                if (res == "success") {
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    setTimeout(function () { parent.layer.close(index) }, 100);//延迟
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+</body>
+</html>

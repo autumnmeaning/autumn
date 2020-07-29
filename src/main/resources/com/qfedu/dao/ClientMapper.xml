@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qfedu.dao.IClientDao">
+    <select id="getAllClient" resultType="client">
+        select * from client
+    </select>
+    <select id="getClientById" resultType="client">
+        select * from client where id = #{id};
+    </select>
+    <select id="getClientByNickname" resultType="client">
+        select * from client where nickname = #{nickname};
+    </select>
+    <select id="getNickName" resultType="map">
+        select id, nickname from client
+    </select>
+    <select id="getLastId" resultType="int">
+        SELECT id FROM client ORDER BY id DESC LIMIT 1
+    </select>
+    <select id="getCount" resultType="int">
+        select count(1) from client
+    </select>
+    <insert id="saveClient">
+        insert into client(id, username, password, nickname, address, money, state) values(#{id}, #{username}, #{password}, #{nickname}, #{address}, #{money}, #{state});
+    </insert>
+    <update id="updateClient">
+        update client set username = #{username}, nickname = #{nickname}, address = #{address}, money = #{money}, state = #{state} where id = #{id};
+    </update>
+    <!--<delete id="removeClient">-->
+        <!--delete from client where id in ${sid};-->
+    <!--</delete>-->
+    <delete id="removeClient">
+        delete from client where id = #{id};
+    </delete>
+</mapper>

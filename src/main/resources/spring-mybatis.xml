@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+   <context:property-placeholder location="classpath:db.properties"/>
+    <bean id="ds" class="com.alibaba.druid.pool.DruidDataSource">
+        <property name="driverClassName" value="${driverClassName}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${user}"/>
+        <property name="password" value="${pass}"/>
+    </bean>
+
+    <bean id="sf" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="typeAliasesPackage" value="com.qfedu.pojo"/>
+        <property name="mapperLocations" value="classpath:com/qfedu/dao/*Mapper.xml"/>
+        <property name="dataSource" ref="ds"/>
+        <property name="configLocation" value="classpath:mybatis-config.xml"/>
+    </bean>
+
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.qfedu.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sf"/>
+    </bean>
+
+    <bean id="dtx" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="ds"/>
+    </bean>
+
+    <tx:advice id="tx" transaction-manager="dtx">
+        <tx:attributes>
+            <tx:method name="save*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+            <tx:method name="update*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+            <tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+            <tx:method name="select*" propagation="REQUIRED" isolation="DEFAULT" rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="mpt" expression="execution(* com.qfedu.dao.*.*(..))"/>
+        <aop:advisor advice-ref="tx" pointcut-ref="mpt"/>
+    </aop:config>
+</beans>
